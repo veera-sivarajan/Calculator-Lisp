@@ -77,3 +77,10 @@ globalEnv = standardEnv()
 def eval(x: Exp, env = globalEnv) -> Exp:
   if isinstance(x, Symbol):
     return env[x]
+
+  elif isinstance(x, Number):
+    return x
+
+  elif x[0] == 'if':
+    (_, test, conseq, alt) = x
+    exp = (conseq if eval(test, env) else alt)
