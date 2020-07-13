@@ -24,7 +24,7 @@ def readTokens(tokens: list) -> Exp:
     L = []
     while tokens[0] != ')':
       #print(hex(id(tokens)))
-      print("Inside while: " ,  tokens)
+      #print("Inside while: " ,  tokens)
       L.append(readTokens(tokens))
     tokens.pop(0)
     return L
@@ -51,7 +51,7 @@ def standardEnv() -> Env:
         'abs':     abs,
         'append':  op.add,  
         'apply':   lambda proc, args: proc(*args),
-        'begin':   lambda *x: x[-1],
+        'begin':   lambda *x: x[1],
         'car':     lambda x: x[0],
         'cdr':     lambda x: x[1:], 
         'cons':    lambda x,y: [x] + y, #x is an item and y is a list
@@ -75,12 +75,35 @@ def standardEnv() -> Env:
 globalEnv = standardEnv()
 
 def eval(x: Exp, env = globalEnv) -> Exp:
-  if isinstance(x, Symbol):
+  print("Expression: " , x)
+  if isinstance(x, Symbol): #Check if built in function 
+    print("Symbol" , x)
     return env[x]
 
-  elif isinstance(x, Number):
+  elif isinstance(x, Number): #Check if number
+    print("Number Instance")
     return x
 
-  elif x[0] == 'if':
+  elif x[0] == 'if': #Check if 
+    print("If condition")
     (_, test, conseq, alt) = x
     exp = (conseq if eval(test, env) else alt)
+    return eval(exp, env)
+
+  elif x[0] == 'define': 
+    print("define statement")
+    (_, symbol, exp) = x
+    env[symbol] = eval(exp, env) #Add variable name: value to env
+
+  else:
+    print("non built it procedure")
+    proc = eval(x[0], env) #store function name in proc
+    args = [eval(arg, env) for arg in x[1:]] #evaluate all arguments and store in args
+    return proc(*args)
+
+print(eval(parse("(begin (define r 10) (* r r))")))
+
+
+
+
+
