@@ -101,9 +101,3 @@ def eval(x: Exp, env = globalEnv) -> Exp:
     args = [eval(arg, env) for arg in x[1:]] #evaluate all arguments and store in args
     return proc(*args)
 
-print(eval(parse("(begin (define r 10) (* r r))")))
-
-
-
-
-
