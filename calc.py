@@ -75,28 +75,28 @@ def standardEnv() -> Env:
 globalEnv = standardEnv()
 
 def eval(x: Exp, env = globalEnv) -> Exp:
-  print("Expression: " , x)
+  #print("Expression: " , x)
   if isinstance(x, Symbol): #Check if built in function 
-    print("Symbol" , x)
+    #print("Symbol" , x)
     return env[x]
 
   elif isinstance(x, Number): #Check if number
-    print("Number Instance")
+    #print("Number Instance")
     return x
 
   elif x[0] == 'if': #Check if 
-    print("If condition")
+    #print("If condition")
     (_, test, conseq, alt) = x
     exp = (conseq if eval(test, env) else alt)
     return eval(exp, env)
 
   elif x[0] == 'define': 
-    print("define statement")
+    #print("define statement")
     (_, symbol, exp) = x
     env[symbol] = eval(exp, env) #Add variable name: value to env
 
   else:
-    print("non built it procedure")
+    #print("non built it procedure")
     proc = eval(x[0], env) #store function name in proc
     args = [eval(arg, env) for arg in x[1:]] #evaluate all arguments and store in args
     return proc(*args)
