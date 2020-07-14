@@ -78,6 +78,8 @@ def eval(x: Exp, env = globalEnv) -> Exp:
   #print("Expression: " , x)
   if isinstance(x, Symbol): #Check if built in function 
     #print("Symbol" , x)
+    if x == 'exit':
+      exit()
     return env[x]
 
   elif isinstance(x, Number): #Check if number
@@ -99,5 +101,6 @@ def eval(x: Exp, env = globalEnv) -> Exp:
     #print("non built it procedure")
     proc = eval(x[0], env) #store function name in proc
     args = [eval(arg, env) for arg in x[1:]] #evaluate all arguments and store in args
-    return proc(*args)
+    return proc(*args)  #unpack elements from list to positional arguments
+                        #func(*[1, 2, 3]) == func(1, 2, 3)
 
